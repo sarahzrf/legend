@@ -1,4 +1,5 @@
 require 'singleton'
+require 'andand'
 
 class World
 	def initialize(rooms={})
@@ -41,7 +42,7 @@ class Room
 
 	def [] x=nil, y=nil
 		if x and y
-			@grid[x][y]
+			@grid[x].andand[y]
 		elsif x
 			@grid[x].dup
 		elsif y
@@ -53,7 +54,7 @@ class Room
 
 	def []= x=nil, y=nil, val
 		if x and y
-			@grid[x][y] = val
+			@grid[x].andand[y] = val
 		elsif x
 			@grid[x] = val
 		elsif y

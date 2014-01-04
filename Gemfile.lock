@@ -1,0 +1,12 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    andand (1.3.3)
+    gosu (0.7.50)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  andand
+  gosu
