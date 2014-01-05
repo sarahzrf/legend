@@ -32,26 +32,26 @@ module Positioned
 	end
 
 	def collide?(other)
-		case other
-		when Positioned
-			x_range.overlap? other.x_range and y_range.overlap? other.y_range
-		when Array
+		if other.respond_to? :to_ary
+			other = other.to_ary
 			x_range.include? other[0] and y_range.include? other[1]
+		else
+			x_range.overlap? other.x_range and y_range.overlap? other.y_range
 		end
 	end
 
 	def direction_from(other)
-		case other
-		when Positioned
-			ox, oy, omax_x, omax_y = other.x, other.y, other.max_x, other.max_y
-		when Array
+		if other.respond_to? :to_ary
+			other = other.to_ary
 			ox, oy, omax_x, omax_y = other + other
+		else
+			ox, oy, omax_x, omax_y = other.x, other.y, other.max_x, other.max_y
 		end
 		distances = {north: omax_y - y, south: max_y - oy,
 							 east: max_x - ox, west: omax_x - x}
-		# we want the greatest one since the other might not be perfectly
-		# aligned in the other direction
-		# (x=10, y=10, ox=9, oy=0 is clearly down)
+		# we want the greatest one since other might not be perfectly
+		# aligned in the less-differing axis; i.e.,
+		# [x=10, y=10, ox=9, oy=0] is clearly north and not east
 		distances.max_by(&:last).first
 	end
 

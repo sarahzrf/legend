@@ -3,14 +3,14 @@ require 'singleton'
 require 'andand'
 
 class World
+	attr_reader :rooms
+	attr_accessor :current_coords
+
 	def initialize(rooms={})
 		@rooms = {}
 		@rooms.merge! rooms
 		@current_coords = 0, 0
 	end
-
-	attr_reader :rooms
-	attr_accessor :current_coords
 
 	def current_room
 		@rooms[@current_coords]
@@ -24,17 +24,17 @@ class World
 		@rooms.values.map &:sprites
 	end
 
-	alias_method :<<, :add_room
+	alias_method :[]=, :add_room
 end
 
 class Room
+	attr_reader :world, :grid, :sprites
+
 	def initialize(world, grid=[[]], sprites=[])
 		@world = world
 		@grid = grid
 		@sprites = []
 	end
-
-	attr_reader :world, :grid, :sprites
 
 	def add_sprite(sprite)
 		@sprites << sprite
