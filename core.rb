@@ -1,3 +1,4 @@
+require './util'
 require 'singleton'
 require 'andand'
 
@@ -27,12 +28,13 @@ class World
 end
 
 class Room
-	def initialize(grid=[[]], sprites=[])
+	def initialize(world, grid=[[]], sprites=[])
+		@world = world
 		@grid = grid
 		@sprites = []
 	end
 
-	attr_reader :sprites
+	attr_reader :world, :grid, :sprites
 
 	def add_sprite(sprite)
 		@sprites << sprite
@@ -63,6 +65,22 @@ class Room
 		else
 			@grid = val
 		end
+	end
+end
+
+class Tile
+	include Positioned
+
+	def x_size
+		1
+	end
+
+	def y_size
+		1
+	end
+
+	def solid?
+		false # default for most kinds of tiles
 	end
 end
 
