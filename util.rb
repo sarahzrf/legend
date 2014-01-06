@@ -1,5 +1,13 @@
 require 'ostruct'
 
+class Class
+	def define(constants)
+		constants.each do |name, val|
+			define_method(name) {val}
+		end
+	end
+end
+
 class Range
 	def overlap?(other)
 		include? other.first or include? other.last
@@ -31,6 +39,14 @@ module Positioned
 
 	def y_range
 		y..max_y
+	end
+
+	def x_irange
+		x.floor..max_x.ceil
+	end
+
+	def y_irange
+		y.floor..max_y.ceil
 	end
 
 	def collide?(other)
@@ -65,7 +81,7 @@ module Positioned
 		return unless kind_of? EventTarget
 		event_data = OpenStruct.new
 		modifier = event_data.direction = direction_from other
-		event :collide, other, event_data, modifier # return the result
+		event :collide, other, event_data, modifier
 	end
 end
 
@@ -74,10 +90,9 @@ module EventTarget
 		handlers = ["on_#{type}", "on_#{type}_#{modifier}",
 							"on_#{subject.type}_#{type}",
 							"on_#{subject.type}_#{type}_#{modifier}"]
-		results = handlers.map do |handler|
+		handlers.map do |handler| # return the handler results; currently unused
 			send handler, subject, data if respond_to? handler
 		end
-		results.compact.last
 	end
 end
 
