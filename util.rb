@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Range
 	def overlap?(other)
 		include? other.first or include? other.last
@@ -60,9 +62,22 @@ module Positioned
 	end
 
 	def collide!(other)
-		return unless kind_of? EventTarget # TODO: create EventTarget...
-		event_data = {}
-		event_data[:room] = room
+		return unless kind_of? EventTarget
+		event_data = OpenStruct.new
+		modifier = event_data.direction = direction_from other
+		event :collide, other, event_data, modifier # return the result
+	end
+end
+
+module EventTarget
+	def event(type, subject, data, modifier=nil)
+		handlers = ["on_#{type}", "on_#{type}_#{modifier}",
+							"on_#{subject.type}_#{type}",
+							"on_#{subject.type}_#{type}_#{modifier}"]
+		results = handlers.map do |handler|
+			send handler, subject, data if respond_to? handler
+		end
+		results.compact.last
 	end
 end
 

@@ -70,6 +70,7 @@ end
 
 class Tile
 	include Positioned
+	include EventTarget
 
 	def x_size
 		1
