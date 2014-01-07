@@ -1,28 +1,5 @@
-require 'ostruct'
-
-class Class
-	def define(constants)
-		constants.each do |name, val|
-			define_method(name) {val}
-		end
-	end
-end
-
-class Range
-	def overlap?(other)
-		include? other.first or include? other.last
-	end
-end
-
-DIRECTIONS = [:north, :south, :east, :west]
-OPPOSITES  = {north: :south, south: :north,
-							east: :west, west: :east}
-
-class Symbol
-	def flip
-		OPPOSITES[self]
-	end
-end
+require_relative 'core_ext'
+require_relative 'event_target'
 
 module Positioned
 	def max_x
@@ -82,17 +59,6 @@ module Positioned
 		event_data = OpenStruct.new
 		modifier = event_data.direction = direction_from other
 		event :collide, other, event_data, modifier
-	end
-end
-
-module EventTarget
-	def event(type, subject, data, modifier=nil)
-		handlers = ["on_#{type}", "on_#{type}_#{modifier}",
-							"on_#{subject.type}_#{type}",
-							"on_#{subject.type}_#{type}_#{modifier}"]
-		handlers.map do |handler| # return the handler results; currently unused
-			send handler, subject, data if respond_to? handler
-		end
 	end
 end
 
