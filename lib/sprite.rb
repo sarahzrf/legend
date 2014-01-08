@@ -21,11 +21,11 @@ class Sprite
 	def update_facing(x, y)
 		x_diff, y_diff = @x - x, @y - y
 		case
-		when x_diff >= y_diff && x_diff < 0
-			@facing = :west
 		when x_diff >= y_diff && x_diff > 0
+			@facing = :west
+		when x_diff >= y_diff && x_diff <= 0
 			@facing = :east
-		when y_diff > x_diff && y_diff < 0
+		when y_diff > x_diff && y_diff <= 0
 			@facing = :north
 		when y_diff > x_diff && y_diff > 0
 			@facing = :south
@@ -40,8 +40,9 @@ class Sprite
 		update_facing x, y
 		ox, oy, = @x, @y
 		@x, @y = x, y
-		@x, @y = ox, oy unless @room.sprite_moved self
-		# make sure the room approces of our movement
+		@room.sprite_moved(self) {@x, @y = ox, oy}
+		# make sure the room approves of our movement
+		# (the block is a callback for a move failure)
 	end
 
 	def room= room

@@ -19,11 +19,15 @@ module Positioned
 	end
 
 	def x_irange
-		x.floor..max_x.ceil
+		top = max_x.floor
+		top -= 1 if top == max_x
+		x.floor..top
 	end
 
 	def y_irange
-		y.floor..max_y.ceil
+		top = max_y.floor
+		top -= 1 if top == max_y
+		y.floor..top
 	end
 
 	def collide?(other)
@@ -57,7 +61,7 @@ module Positioned
 	def collide!(other)
 		return unless kind_of? EventTarget
 		event_data = OpenStruct.new
-		modifier = event_data.direction = direction_from other
+		modifier = event_data.direction = direction_to other
 		event :collide, other, event_data, modifier
 	end
 end

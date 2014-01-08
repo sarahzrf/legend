@@ -8,7 +8,7 @@ end
 
 class Range
 	def overlap?(other)
-		include? other.first or include? other.last
+		first < other.first or last > other.last
 	end
 end
 
