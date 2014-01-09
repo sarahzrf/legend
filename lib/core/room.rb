@@ -27,13 +27,13 @@ class Room
 		# yield to the the reset callback to move the sprite back to where it was.
 		# we'll call the collision handlers on the colliding tile anyway, 
 		# because push events are just collision events on solid tiles.
-		# we return before running the sprite colliisoni hooks because
+		# we return before running the sprite collision hooks because
 		# sprites do not have a separate push hook and the sprite that
-		# to move will not be colliding with anything new.
+		# was about to move will not be colliding with anything new.
 		# TODO: actually fucking differentiate between collision and pushing,
-		# rendering this length comment unnecessary.
+		# rendering this lengthy comment unnecessary.
 		tiles.each do |(x, y), tile|
-			event_extend tile, x, y
+			position_extend tile, x, y
 			tile.collide! sprite
 		end
 		return if collides
@@ -53,7 +53,7 @@ class Room
 		end
 	end
 
-	def event_extend(tile, x, y)
+	def position_extend(tile, x, y)
 		room = self
 		tile.singleton_class.class_eval do
 			define x: x, y: y, room: room

@@ -1,18 +1,23 @@
 require_relative 'core_ext'
 require_relative 'event_target'
 require_relative 'positioned'
+require_relative '../display/drawable'
 
 class Sprite
 	include Positioned
 	include EventTarget
 
-	attr_reader :room, :x, :y, :facing, :moving
-	define x_size: 1, y_size: 1, solid?: true, type: 'generic_sprite'
-	# most sprites are solid
-	# type is an internal identifer; currently used in event dispatching
+	include Drawable
+	define z_index: 1
 
-	def initialize(room, x, y, facing=:north)
-		@room, @x, @y, @facing = room, x, y, facing
+	attr_reader :room, :x, :y, :facing, :moving, :state
+	define x_size: 0.8, y_size: 0.8, solid?: true, type: :generic_sprite
+	# most sprites are solid
+	# type is an internal identifer
+
+	def initialize(room, x, y, facing=:north, state=:idle)
+		@room, @x, @y = room, x, y
+		@facing, @state = facing, state
 		@moving = false
 		# @moving will be set in the update method, once it's written
 		@room << self
@@ -21,13 +26,13 @@ class Sprite
 	def update_facing(x, y)
 		x_diff, y_diff = @x - x, @y - y
 		case
-		when x_diff >= y_diff && x_diff > 0
+		when x_diff.abs >= y_diff.abs && x_diff > 0
 			@facing = :west
-		when x_diff >= y_diff && x_diff <= 0
+		when x_diff.abs >= y_diff.abs && x_diff <= 0
 			@facing = :east
-		when y_diff > x_diff && y_diff <= 0
+		when y_diff.abs > x_diff.abs && y_diff > 0
 			@facing = :north
-		when y_diff > x_diff && y_diff > 0
+		when y_diff.abs > x_diff.abs && y_diff <= 0
 			@facing = :south
 		end
 	end

@@ -22,5 +22,11 @@ class Symbol
 	end
 end
 
+class Hash
+	def slice(*keys)
+		Hash[keys.zip(values_at(*keys))]
+	end
+end
+
 # vim:set tabstop=2 shiftwidth=2 noexpandtab:
 
