@@ -63,6 +63,7 @@ class Room
 	alias_method :<<, :add_sprite
 
 	def [] x=nil, y=nil
+		x, y = x if x.respond_to? :to_ary
 		if x and y
 			@grid[x].andand[y]
 		elsif x
@@ -75,6 +76,7 @@ class Room
 	end
 
 	def []= x=nil, y=nil, val
+		x, y = x if x.respond_to? :to_ary
 		if x and y
 			(@grid[x] ||= [])[y] = val
 		elsif x

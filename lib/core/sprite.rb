@@ -28,11 +28,11 @@ class Sprite
 		case
 		when x_diff.abs >= y_diff.abs && x_diff > 0
 			@facing = :west
-		when x_diff.abs >= y_diff.abs && x_diff <= 0
+		when x_diff.abs >= y_diff.abs && x_diff < 0
 			@facing = :east
 		when y_diff.abs > x_diff.abs && y_diff > 0
 			@facing = :north
-		when y_diff.abs > x_diff.abs && y_diff <= 0
+		when y_diff.abs > x_diff.abs && y_diff < 0
 			@facing = :south
 		end
 	end
